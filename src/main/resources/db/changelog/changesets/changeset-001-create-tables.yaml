@@ -1,0 +1,280 @@
+databaseChangeLog:
+  - changeSet:
+      id: enable-pgcrypto
+      author: Suleiman Michael
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+  - changeSet:
+      id: create-users-table
+      author: Suleiman Michael
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+
+  - changeSet:
+      id: create-stores-table
+      author: Suleiman Michael
+      changes:
+        - createTable:
+            tableName: stores
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-receipts-table
+      author: Suleiman Michael
+      changes:
+        - createTable:
+            tableName: receipts
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: store_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_amount
+                  type: NUMERIC(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-items-table
+      author: Suleiman Michael
+      changes:
+        - createTable:
+            tableName: items
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: create-store-items-table
+      author: Suleiman Michael
+      changes:
+        - createTable:
+            tableName: store_items
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: store_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: NUMERIC(10,2)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: store_items
+            columnNames: store_id, item_id
+            constraintName: uk_store_items_unique
+
+  - changeSet:
+      id: create-receipt-items-table
+      author: Suleiman Michael
+      changes:
+        - createTable:
+            tableName: receipt_items
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: receipt_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: store_item_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price_at_purchase
+                  type: NUMERIC(10,2)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: add-foreign-key-constraints
+      author: Suleiman Michael
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: receipts
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_receipts_user
+
+        - addForeignKeyConstraint:
+            baseTableName: receipts
+            baseColumnNames: store_id
+            referencedTableName: stores
+            referencedColumnNames: id
+            constraintName: fk_receipts_store
+
+        - addForeignKeyConstraint:
+            baseTableName: store_items
+            baseColumnNames: store_id
+            referencedTableName: stores
+            referencedColumnNames: id
+            constraintName: fk_store_items_store
+
+        - addForeignKeyConstraint:
+            baseTableName: store_items
+            baseColumnNames: item_id
+            referencedTableName: items
+            referencedColumnNames: id
+            constraintName: fk_store_items_item
+
+        - addForeignKeyConstraint:
+            baseTableName: receipt_items
+            baseColumnNames: receipt_id
+            referencedTableName: receipts
+            referencedColumnNames: id
+            constraintName: fk_receipt_items_receipt
+
+        - addForeignKeyConstraint:
+            baseTableName: receipt_items
+            baseColumnNames: store_item_id
+            referencedTableName: store_items
+            referencedColumnNames: id
+            constraintName: fk_receipt_items_store_item
+
+  - changeSet:
+      id: add-indexes
+      author: Suleiman Michael
+      changes:
+        - createIndex:
+            tableName: receipts
+            indexName: idx_receipts_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: receipts
+            indexName: idx_receipts_store_id
+            columns:
+              - column:
+                  name: store_id
+        - createIndex:
+            tableName: store_items
+            indexName: idx_store_items_store_id
+            columns:
+              - column:
+                  name: store_id
+        - createIndex:
+            tableName: store_items
+            indexName: idx_store_items_item_id
+            columns:
+              - column:
+                  name: item_id
+        - createIndex:
+            tableName: receipt_items
+            indexName: idx_receipt_items_receipt_id
+            columns:
+              - column:
+                  name: receipt_id
+        - createIndex:
+            tableName: receipt_items
+            indexName: idx_receipt_items_store_item_id
+            columns:
+              - column:
+                  name: store_item_id

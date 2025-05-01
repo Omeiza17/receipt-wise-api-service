@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: receipt-wise-api-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/receipt-wise
+    username: ${db-username}
+    password: ${db-password}
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+logging:
+  level:
+    liquibase: DEBUG

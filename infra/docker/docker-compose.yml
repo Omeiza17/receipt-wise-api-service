@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: receipt-wise
+      POSTGRES_PASSWORD: 85QVHcEktFimOt
+      POSTGRES_DB: receipt-wise
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgres/data
+
+volumes:
+  postgres_data:
