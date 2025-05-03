@@ -18,7 +18,12 @@ import java.util.UUID;
 @Table(name = "receipts", schema = "public")
 public class Receipt {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(
+            columnDefinition = "UUID DEFAULT gen_random_uuid()",
+            updatable = false,
+            insertable = false
+    )
     private UUID id;
 
     @NotNull

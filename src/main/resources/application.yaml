@@ -13,3 +13,8 @@ spring:
 logging:
   level:
     liquibase: DEBUG
+    root: WARN
+    dev.codingstoic.receiptwise: DEBUG
+
+server:
+  port: 8090

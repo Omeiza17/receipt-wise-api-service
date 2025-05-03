@@ -16,7 +16,12 @@ import java.util.UUID;
 @Table(name = "store_items", schema = "public")
 public class StoreItem {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(
+            columnDefinition = "UUID DEFAULT gen_random_uuid()",
+            updatable = false,
+            insertable = false
+    )
     private UUID id;
 
     @NotNull
