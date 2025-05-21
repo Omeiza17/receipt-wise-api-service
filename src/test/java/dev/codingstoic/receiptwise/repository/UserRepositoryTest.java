@@ -27,4 +27,12 @@ class UserRepositoryTest extends AbstractTest {
         assertEquals("john.doe@example.com", result.get().getEmail());
     }
 
+    @Test
+    @Sql(value = {"classpath:sql/clean_script.sql", "classpath:sql/add_user.sql"})
+    void itShouldFindByEmail() {
+        Optional<User> result = userRepository.findByEmail("jane.smith@example.com");
+        assertThat(result).isPresent();
+        assertEquals("jane.smith", result.get().getUsername());
+    }
+
 }
