@@ -10,6 +10,9 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+  jpa:
+    open-in-view: off
+
 logging:
   level:
     liquibase: DEBUG

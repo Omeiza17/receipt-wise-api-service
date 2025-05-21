@@ -12,9 +12,3 @@ CREATE TABLE IF NOT EXISTS TESTDB.users
     password VARCHAR(255)                               NOT NULL,
     email    VARCHAR(255) UNIQUE                        NOT NULL
 );
-
--- COMMENT ON TABLE users IS 'Table to store user account information.';
--- COMMENT ON COLUMN users.id IS 'Unique identifier for the user (UUID, primary key).';
--- COMMENT ON COLUMN users.username IS 'User''s chosen username (up to 50 characters, cannot be null).';
--- COMMENT ON COLUMN users.password IS 'User''s hashed password (up to 255 characters, cannot be null).';
--- COMMENT ON COLUMN users.email IS 'User''s email address (unique, cannot be null).';

@@ -2,7 +2,6 @@ package dev.codingstoic.receiptwise;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-@SuppressWarnings("resource")
 public class TestcontainersConfiguration extends PostgreSQLContainer<TestcontainersConfiguration> {
     public static final String DB_CONNECTION_URL = "DB_URL";
     /**
@@ -23,9 +22,6 @@ public class TestcontainersConfiguration extends PostgreSQLContainer<Testcontain
     private TestcontainersConfiguration() {
         // Private constructor to prevent instantiation
         super(IMAGE_VERSION);
-//        this.withDatabaseName("testdb");
-//        this.withUsername("mike");
-//        this.withPassword("pwd");
     }
 
     public static TestcontainersConfiguration getInstance(String initScript) {
