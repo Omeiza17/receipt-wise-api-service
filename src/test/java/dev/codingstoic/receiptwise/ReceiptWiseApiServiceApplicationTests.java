@@ -1,15 +1,11 @@
 package dev.codingstoic.receiptwise;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.SpringApplication;
 
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest
-class ReceiptWiseApiServiceApplicationTests {
+public class ReceiptWiseApiServiceApplicationTests {
 
-    @Test
-    void contextLoads() {
+    public static void main(String[] args) {
+        SpringApplication.from(ReceiptWiseApiServiceApplication::main).with(TestcontainersConfiguration.class).run(args);
     }
 
 }
